@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config.js';
@@ -18,33 +17,36 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB
 mongoDB();
 
+// CORS - MUST be before routes
+app.use(cors({
+  origin: ['https://time-kids-app-front-end.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
+
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-//  CORS for Vercel frontend (with OPTIONS + headers fix)
-app.use(cors({
-  origin: "https://time-kids-app-front-end.vercel.app",
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
-
-//  Explicitly handle preflight requests
-app.options('*', cors());
-
-// API routes
+// API routes - MUST come before static files
 app.use('/api/blog', blogRoutes);
 app.use('/api/user', userRouter);
 
-// Serve React frontend
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-// SPA fallback
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
+// Serve React frontend ONLY in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  
+  // SPA fallback - MUST be last
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+  });
+}
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
