@@ -23,7 +23,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // CORS for Vercel frontend
 app.use(cors({
-  origin:"https://time-kids-app-backend.vercel.app",
+  origin:"https://time-kids-app-front-end.vercel.app",
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials:true
 }));
 
