@@ -22,7 +22,10 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // CORS for Vercel frontend
-app.use(cors());
+app.use(cors({
+  origin:"https://time-kids-app-backend.vercel.app",
+  credentials:true
+}));
 
 // API routes
 app.use('/api/blog', blogRoutes);
