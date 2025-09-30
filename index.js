@@ -22,6 +22,11 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/user', userRouter)
 
 // Server
+
+app.get("/",(req,res) => {
+  res.send("Backend is running")
+})
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
