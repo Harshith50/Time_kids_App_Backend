@@ -23,8 +23,6 @@ app.use(cors({
   credentials: true,
 }));
 
-// Handle preflight requests explicitly
-app.options('*', cors());
 
 // Middleware
 app.use(express.json({ limit: '10mb' }));
