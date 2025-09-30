@@ -19,7 +19,7 @@ mongoDB();
 
 // CORS - MUST be before routes
 app.use(cors({
-  origin: ['https://time-kids-app-front-end.vercel.app', 'http://localhost:3000'],
+  origin: 'https://time-kids-app-front-end.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
