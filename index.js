@@ -1,3 +1,4 @@
+
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config.js';
@@ -21,12 +22,16 @@ mongoDB();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-// CORS for Vercel frontend
+//  CORS for Vercel frontend (with OPTIONS + headers fix)
 app.use(cors({
-  origin:"https://time-kids-app-front-end.vercel.app",
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials:true
+  origin: "https://time-kids-app-front-end.vercel.app",
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
+
+//  Explicitly handle preflight requests
+app.options('*', cors());
 
 // API routes
 app.use('/api/blog', blogRoutes);
@@ -42,3 +47,4 @@ app.get('*', (req, res) => {
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
